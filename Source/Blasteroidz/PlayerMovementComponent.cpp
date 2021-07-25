@@ -16,7 +16,7 @@ void UPlayerMovementComponent::CalcVelocity(float DeltaTime, float Friction, boo
 	//VISUALIZE
 	float sSpeed = (Velocity.Size());
 	if (GEngine) {
-		GEngine->AddOnScreenDebugMessage(1, 0.f, FColor::White, FString::Printf(TEXT("%f"),sSpeed));
+		GEngine->AddOnScreenDebugMessage(0, 0.f, FColor::White, FString::Printf(TEXT("Player Speed: %f"),sSpeed));
 	}
 
 

@@ -19,6 +19,9 @@ public:
 
 	APlayerShipCharacter(const FObjectInitializer& ObjectInitializer);
 
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		class UGravityManager* Gravity;
 //	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 //		class USpringArmComponent* SpringArm;
 //
@@ -35,6 +38,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		AMyCameraActor* MyCamera;
+
 
 public:	
 	// Called every frame

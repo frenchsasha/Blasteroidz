@@ -1,18 +1,24 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Asteroid.h"
-#include "ProjectileMComponent.h"
-#include "PlayerMovementComponent.h"
+#include "GeneralMovementComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/SphereComponent.h"
+#include "GravityManager.h"
+
 // Sets default values
 AAsteroid::AAsteroid()
-	
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	ProjectileMComponent = CreateDefaultSubobject<UProjectileMComponent>(TEXT("CUSTOM PROJECTILE"));
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("STATIC MESH"));
+	//Collision = CreateDefaultSubobject<USphereComponent>(TEXT("CUSTOM COLLISION"));
+	GeneralMovementComponent = CreateDefaultSubobject<UGeneralMovementComponent>(TEXT("CUSTOM MOVEMENT"));
+	Gravity = CreateDefaultSubobject<UGravityManager>(TEXT("GRAVITY MANAGER"));
 	
-
+	
+	StaticMesh->CanEditSimulatePhysics();
+	
 
 }
 
@@ -20,7 +26,6 @@ AAsteroid::AAsteroid()
 void AAsteroid::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -29,9 +34,11 @@ void AAsteroid::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	//VISUALIZE
-	float sSpeed = (AAsteroid::GetVelocity().Size());
-	if (GEngine) {
-		GEngine->AddOnScreenDebugMessage(2, 0.f, FColor::White, FString::Printf(TEXT("%f"), sSpeed));
-	}
+
+	 
+//	float sSpeed = (AAsteroid::GetVelocity().Size());
+//	if (GEngine) {
+//		GEngine->AddOnScreenDebugMessage(1, 0.f, FColor::White, FString::Printf(TEXT("Asteroid Speed: %f"), sSpeed));
+//	}
 }
 

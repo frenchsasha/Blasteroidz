@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "Asteroid.generated.h"
 
 UCLASS()
@@ -15,8 +16,19 @@ public:
 	// Sets default values for this actor's properties
 	AAsteroid();
 
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	//	class USphereComponent* Collision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		class UStaticMeshComponent* StaticMesh;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	class UProjectileMComponent* ProjectileMComponent;
+		class UGeneralMovementComponent* GeneralMovementComponent;
+
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class UGravityManager* Gravity;
+
 
 protected:
 	// Called when the game starts or when spawned

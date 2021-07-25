@@ -2,7 +2,7 @@
 
 
 #include "GravityManager.h"
-#include "EngineUtils.h"
+
 
 // Sets default values for this component's properties
 UGravityManager::UGravityManager()
@@ -19,14 +19,6 @@ UGravityManager::UGravityManager()
 void UGravityManager::BeginPlay()
 {
 	Super::BeginPlay();
-	int count = 0;
-	for (TObjectIterator<UGravityManager> itr; itr; itr++) {
-		count++;
-	
-	}
-	if (GEngine) {
-		GEngine->AddOnScreenDebugMessage(3, 0.f, FColor::White, FString::Printf(TEXT("%d"), count));
-	}
 
 	// ...
 	

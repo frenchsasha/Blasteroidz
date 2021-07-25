@@ -2,6 +2,8 @@
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GravityManager.h"
+
 #include "PlayerShipCharacter.h"
 #include "PlayerMovementComponent.h"
 #include "MyCameraActor.h"
@@ -13,6 +15,7 @@ APlayerShipCharacter::APlayerShipCharacter(const FObjectInitializer& ObjectIniti
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
+	Gravity = CreateDefaultSubobject<UGravityManager>(TEXT("GRAVITY MANAGER"));
 //	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 //	SpringArm->SetupAttachment(RootComponent);
 //
@@ -27,6 +30,7 @@ APlayerShipCharacter::APlayerShipCharacter(const FObjectInitializer& ObjectIniti
 // Called when the game starts or when spawned
 void APlayerShipCharacter::BeginPlay()
 {
+	
 	UWorld* World = GetWorld();
 	check(World);
 	Super::BeginPlay();

@@ -16,6 +16,14 @@ public:
 	// Sets default values for this component's properties
 	UGravityManager();
 
+	UPROPERTY(Category = "Asteroid", BlueprintReadWrite, EditAnywhere)
+		float Radius = 16.f;
+	UPROPERTY(Category = "Asteroid", BlueprintReadWrite, EditAnywhere)
+		float Mass = 800.f;
+	UPROPERTY(Category = "Asteroid", BlueprintReadWrite, EditAnywhere)
+		float AsteroidDrag = 0.2f;
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
