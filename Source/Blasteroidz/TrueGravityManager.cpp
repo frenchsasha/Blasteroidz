@@ -6,7 +6,7 @@
 #include "Asteroid.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "GravityManager.h"
+#include "GravityComponent.h"
 #include "ProjectileMComponent.h"
 #include "Components/PrimitiveComponent.h"
 #include "GeneralMovementComponent.h"
@@ -26,20 +26,15 @@
 // Sets default values
 ATrueGravityManager::ATrueGravityManager()
 {
-	
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
+
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	//Get Player Data
-	if (PlayerShipCharacter) {
-		UCapsuleComponent* PlayerCollision = PlayerShipCharacter->FindComponentByClass<UCapsuleComponent>();
-		float PlayerColRadius = PlayerCollision->GetScaledCapsuleRadius();
 
-		//Get Player Location, Mass and Radius
 
-		float PlayerMass = PlayerShipCharacter->Gravity->Mass;
-		float PlayerGravRadius = PlayerShipCharacter->Gravity->Radius;
-	}
-	
+
+
+
 
 }
 
@@ -47,7 +42,8 @@ ATrueGravityManager::ATrueGravityManager()
 void ATrueGravityManager::BeginPlay()
 {
 	Super::BeginPlay();
-	PlayerShipCharacter = Cast<APlayerShipCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	
 
 
 
@@ -58,13 +54,28 @@ void ATrueGravityManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	float PlayerColRadius = 0.f;
-	FVector PlayerLocation = FVector::ZeroVector;
-	float PlayerMass = 0.f;
-	float PlayerGravRadius = 0.f;
+	float PlayerMass;
+	float PlayerGravRadius;
+	float PlayerColRadius;
 
-	
+	PlayerShipCharacter = Cast<APlayerShipCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	//Get Player Data
+	//if (PlayerShipCharacter) {
+	//	if (PlayerShipCharacter->FindComponentByClass<UGravityComponent>()) {
+			UCapsuleComponent* PlayerCollision = PlayerShipCharacter->FindComponentByClass<UCapsuleComponent>();
+			PlayerColRadius = PlayerCollision->GetScaledCapsuleRadius();
+
+			//Get Player Location, Mass and Radius
+
+			PlayerMass = PlayerShipCharacter->GravityComponent->Mass;
+			PlayerGravRadius = PlayerShipCharacter->GravityComponent->Radius;
+	//	}
+//	}
+
+
+	FVector PlayerLocation = FVector::ZeroVector;
 	PlayerLocation = PlayerShipCharacter->GetActorLocation();
+
 	//Per Asteroid
 	for (TActorIterator<AAsteroid> Current(GetWorld()); Current; ++Current) {
 		float CurrentColRadius = 0.f;
@@ -75,9 +86,9 @@ void ATrueGravityManager::Tick(float DeltaTime)
 
 		//Get Current Location, Mass and Radius
 		FVector CurrentLocation = Current->GetActorLocation();
-		float CurrentMass = Current->Gravity->Mass;
-		float CurrentGravRadius = Current->Gravity->Radius;
-		float CurrentAsteroidDrag = Current->Gravity->AsteroidDrag;
+		float CurrentMass = Current->GravityComponent->Mass;
+		float CurrentGravRadius = Current->GravityComponent->Radius;
+		float CurrentAsteroidDrag = Current->GravityComponent->AsteroidDrag;
 		FVector CurrentScale = Current->GetActorTransform().GetScale3D();
 		FVector CurrentVelocity = Current->GetVelocity();
 
@@ -106,22 +117,22 @@ void ATrueGravityManager::Tick(float DeltaTime)
 
 		//Only Add Force if Not Intersecting
 		if ((PlayerLocation - CurrentLocation).Size() > PlayerColRadius + CurrentColRadius) {
-			CurrentMeshComponent->AddForce(-CurrentVelocity * AsteroidDrag*CurrentAsteroidDrag, NAME_None, true);
-			CurrentMeshComponent->AddForce(ToPlayer * CurrentToPlayerAcceleration, NAME_None, true);
+			//CurrentMeshComponent->AddForce(-CurrentVelocity * AsteroidDrag*CurrentAsteroidDrag, NAME_None, true);
+			//CurrentMeshComponent->AddForce(ToPlayer * CurrentToPlayerAcceleration, NAME_None, true);
 		}
 
 
 			//VISUALIZE
-			float dist = sqrt((GravitationalConstant * Current->Gravity->Radius * Current->Gravity->Mass) / MinAccel);
+			float dist = sqrt((GravitationalConstant * Current->GravityComponent->Radius * Current->GravityComponent->Mass) / MinAccel);
 			FMatrix AsteroidMatrix = FMatrix(FVector::UpVector, FVector::ForwardVector, FVector::RightVector, CurrentLocation);
 			DrawDebugCircle(GetWorld(), AsteroidMatrix, CurrentColRadius, 64, FColor::Blue, false, -1.f, 1, 5.f);
 			//DrawDebugCircle(GetWorld(), AsteroidMatrix, dist, 64, FColor::Red, false, -1.f, 1, 5.f);
 			
 
 			//VISUALIZE
-		//	float dist = sqrt((GravitationalConstant * PlayerShipCharacter->Gravity->Radius * PlayerShipCharacter->Gravity->Mass) / MinAccel);
+		//	float dist = sqrt((GravitationalConstant * PlayerShipCharacter->GravityComponent->Radius * PlayerShipCharacter->GravityComponent->Mass) / MinAccel);
 		//	FMatrix PlayerMatrix = FMatrix(FVector::UpVector, FVector::ForwardVector, FVector::RightVector, PlayerLocation);
-		//	DrawDebugCircle(GetWorld(), PlayerMatrix, PlayerColRadius, 64, FColor::Green, false, -1.f, 1, 5.f);
+		//	DrawDebugCircle(GetWorld(), PlayerMatrix, 50.F, 64, FColor::Green, false, -1.f, 1, 5.f);
 		//	DrawDebugCircle(GetWorld(), PlayerMatrix, dist, 64, FColor::Red, false, -1.f, 1, 5.f);
 
 		
@@ -138,9 +149,9 @@ void ATrueGravityManager::Tick(float DeltaTime)
 
 				//Get Target Location, Mass and Radius
 				FVector TargetLocation = Target->GetActorLocation();
-				float TargetMass = Target->Gravity->Mass;
-				float TargetGravRadius = Target->Gravity->Radius;
-				float TargetAsteroidDrag = Target->Gravity->AsteroidDrag;
+				float TargetMass = Target->GravityComponent->Mass;
+				float TargetGravRadius = Target->GravityComponent->Radius;
+				float TargetAsteroidDrag = Target->GravityComponent->AsteroidDrag;
 				FVector TargetScale = Target->GetActorTransform().GetScale3D();
 				FVector TargetVelocity = Target->GetVelocity();
 
@@ -174,7 +185,7 @@ void ATrueGravityManager::Tick(float DeltaTime)
 					//Why did this suddenly work???
 					
 						//VISUALIZE
-						float MinDist = sqrt((GravitationalConstant * Current->Gravity->Radius * Current->Gravity->Mass) / MinAccel);
+						float MinDist = sqrt((GravitationalConstant * Current->GravityComponent->Radius * Current->GravityComponent->Mass) / MinAccel);
 						//FMatrix AsteroidMatrix = FMatrix(FVector::UpVector, FVector::ForwardVector, FVector::RightVector, CurrentLocation);
 						DrawDebugCircle(GetWorld(), AsteroidMatrix, CurrentGravRadius, 64, FColor::Green, false, -1.f, 1, 5.f);
 						DrawDebugCircle(GetWorld(), AsteroidMatrix, MinDist, 64, FColor::Red, false, -1.f, 1, 5.f);

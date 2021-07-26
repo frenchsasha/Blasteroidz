@@ -27,7 +27,7 @@ public:
 
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	class UGravityManager* Gravity;
+	class UGravityComponent* GravityComponent;
 
 
 protected:

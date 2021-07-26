@@ -21,7 +21,7 @@ public:
 
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		class UGravityManager* Gravity;
+		class UGravityComponent* GravityComponent;
 //	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 //		class USpringArmComponent* SpringArm;
 //

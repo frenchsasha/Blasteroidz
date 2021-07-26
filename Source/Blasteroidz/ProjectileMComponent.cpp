@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-#include "GameFramework/ProjectileMovementComponent.h"
 #include "ProjectileMComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
+
 
 //FVector UProjectileMComponent::ComputeVelocity(FVector InitialVelocity, float DeltaTime) 
 //{

@@ -1,10 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
+#include "PlayerShipCharacter.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-#include "GravityManager.h"
+#include "GravityComponent.h"
 
-#include "PlayerShipCharacter.h"
+
 #include "PlayerMovementComponent.h"
 #include "MyCameraActor.h"
 
@@ -15,7 +16,8 @@ APlayerShipCharacter::APlayerShipCharacter(const FObjectInitializer& ObjectIniti
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	Gravity = CreateDefaultSubobject<UGravityManager>(TEXT("GRAVITY MANAGER"));
+	GravityComponent = CreateDefaultSubobject<UGravityComponent>(TEXT("Gravity Component"));
+//	Gravity = CreateDefaultSubobject<UGravityComponent>(TEXT("GRAVITY MANAGER"));
 //	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 //	SpringArm->SetupAttachment(RootComponent);
 //

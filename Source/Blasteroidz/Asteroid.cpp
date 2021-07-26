@@ -4,7 +4,7 @@
 #include "GeneralMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
-#include "GravityManager.h"
+#include "GravityComponent.h"
 
 // Sets default values
 AAsteroid::AAsteroid()
@@ -14,7 +14,7 @@ AAsteroid::AAsteroid()
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("STATIC MESH"));
 	//Collision = CreateDefaultSubobject<USphereComponent>(TEXT("CUSTOM COLLISION"));
 	GeneralMovementComponent = CreateDefaultSubobject<UGeneralMovementComponent>(TEXT("CUSTOM MOVEMENT"));
-	Gravity = CreateDefaultSubobject<UGravityManager>(TEXT("GRAVITY MANAGER"));
+	GravityComponent = CreateDefaultSubobject<UGravityComponent>(TEXT("Gravity Component"));
 	
 	
 	StaticMesh->CanEditSimulatePhysics();

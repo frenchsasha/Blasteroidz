@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "GravityManager.generated.h"
+#include "GravityComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BLASTEROIDZ_API UGravityManager : public UActorComponent
+class BLASTEROIDZ_API UGravityComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UGravityManager();
+	UGravityComponent();
 
 	UPROPERTY(Category = "Asteroid", BlueprintReadWrite, EditAnywhere)
 		float Radius = 16.f;

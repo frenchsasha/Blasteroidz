@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-#include "ProjectileMComponent.h"
 #include "Projectile.h"
+#include "ProjectileMComponent.h"
+
 
 // Sets default values
 AProjectile::AProjectile()
