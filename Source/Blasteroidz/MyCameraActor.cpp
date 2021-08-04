@@ -45,6 +45,7 @@ void AChaseCam::Tick(float DeltaSeconds) {
 
 		FVector IdealLocation = GetInstigator()->GetActorLocation() + IdealOffset;
 		FVector CurrentLocation = GetActorLocation();
+		float CurrentSpeed = GetVelocity().Size();
 		FVector DeltaLocation = IdealLocation - CurrentLocation;
 		FVector AbsDeltaLocation = FVector(FMath::Abs(DeltaLocation.X), FMath::Abs(DeltaLocation.Y), FMath::Abs(DeltaLocation.Z));
 		FVector MaxMovementThisFrame = CameraSpeedPerAxis * DeltaSeconds;
@@ -103,11 +104,15 @@ void AChaseCam::Tick(float DeltaSeconds) {
 			DesiredMovementThisFrame.Component(i) = FMath::Min(AbsDeltaLocation.Component(i), MaxMovementThisFrame.Component(i)) * FMath::Sign(DeltaLocation.Component(i));
 		}
 
+		
 		//overeall speed clamp
 		DesiredMovementThisFrame = DesiredMovementThisFrame.GetClampedToMaxSize(CurrentCameraSpeedLimiter * DeltaSeconds);
 
 		SetActorLocation(CurrentLocation + DesiredMovementThisFrame+MovementThisFrameDueToCap);
+		
 
+		//FMath::Lerp(GetActorLocation(),)
+		//SetActorLocation()
 
 		//Debug
 

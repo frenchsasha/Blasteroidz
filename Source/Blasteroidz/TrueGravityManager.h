@@ -23,6 +23,10 @@ public:
 	UPROPERTY(Category = "Gravity", BlueprintReadWrite, EditAnywhere)
 	float GravitationalConstant = 0.3f;
 
+
+	UPROPERTY(Category = "Gravity", BlueprintReadWrite, EditAnywhere)
+		float RepelMult = 10.f;
+
 	UPROPERTY(Category = "Asteroid Movement", BlueprintReadWrite, EditAnywhere)
 		//FROM 0-1
 		float AsteroidDrag = 0.5f;

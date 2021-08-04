@@ -32,6 +32,7 @@ ATrueGravityManager::ATrueGravityManager()
 	PrimaryActorTick.bCanEverTick = true;
 
 
+	
 
 
 
@@ -43,7 +44,7 @@ void ATrueGravityManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+	PlayerShipCharacter = Cast<APlayerShipCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 
 
@@ -58,10 +59,9 @@ void ATrueGravityManager::Tick(float DeltaTime)
 	float PlayerGravRadius;
 	float PlayerColRadius;
 
-	PlayerShipCharacter = Cast<APlayerShipCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	//Get Player Data
-	//if (PlayerShipCharacter) {
-	//	if (PlayerShipCharacter->FindComponentByClass<UGravityComponent>()) {
+	if (PlayerShipCharacter) {
+		if (PlayerShipCharacter->FindComponentByClass<UGravityComponent>()) {
 			UCapsuleComponent* PlayerCollision = PlayerShipCharacter->FindComponentByClass<UCapsuleComponent>();
 			PlayerColRadius = PlayerCollision->GetScaledCapsuleRadius();
 
@@ -69,8 +69,8 @@ void ATrueGravityManager::Tick(float DeltaTime)
 
 			PlayerMass = PlayerShipCharacter->GravityComponent->Mass;
 			PlayerGravRadius = PlayerShipCharacter->GravityComponent->Radius;
-	//	}
-//	}
+		}
+	}
 
 
 	FVector PlayerLocation = FVector::ZeroVector;
@@ -109,23 +109,23 @@ void ATrueGravityManager::Tick(float DeltaTime)
 		ToPlayer.Normalize();
 
 			//VISUALIZE Asteroid to Player
-			DrawDebugLine(GetWorld(), CurrentLocation, PlayerLocation, FColor::Purple, false, -1.f, 10.f);
+			//DrawDebugLine(GetWorld(), CurrentLocation, PlayerLocation, FColor::Purple, false, -1.f, 10.f);
 
 		//Gravity Calculations From Player To Asteroid
 		CurrentToPlayerDistance = (CurrentLocation - PlayerLocation).Size();
 		CurrentToPlayerAcceleration = (GravitationalConstant * PlayerGravRadius * PlayerMass) / (CurrentToPlayerDistance * CurrentToPlayerDistance);
 
 		//Only Add Force if Not Intersecting
-		if ((PlayerLocation - CurrentLocation).Size() > PlayerColRadius + CurrentColRadius) {
-			//CurrentMeshComponent->AddForce(-CurrentVelocity * AsteroidDrag*CurrentAsteroidDrag, NAME_None, true);
-			//CurrentMeshComponent->AddForce(ToPlayer * CurrentToPlayerAcceleration, NAME_None, true);
+		if ((PlayerLocation - CurrentLocation).Size() > PlayerColRadius) {
+			CurrentMeshComponent->AddForce(-CurrentVelocity * AsteroidDrag*CurrentAsteroidDrag, NAME_None, true);
+			CurrentMeshComponent->AddForce(ToPlayer * CurrentToPlayerAcceleration, NAME_None, true);
 		}
 
 
 			//VISUALIZE
-			float dist = sqrt((GravitationalConstant * Current->GravityComponent->Radius * Current->GravityComponent->Mass) / MinAccel);
-			FMatrix AsteroidMatrix = FMatrix(FVector::UpVector, FVector::ForwardVector, FVector::RightVector, CurrentLocation);
-			DrawDebugCircle(GetWorld(), AsteroidMatrix, CurrentColRadius, 64, FColor::Blue, false, -1.f, 1, 5.f);
+		//	float dist = sqrt((GravitationalConstant * Current->GravityComponent->Radius * Current->GravityComponent->Mass) / MinAccel);
+		//	FMatrix AsteroidMatrix = FMatrix(FVector::UpVector, FVector::ForwardVector, FVector::RightVector, CurrentLocation);
+		//	DrawDebugCircle(GetWorld(), AsteroidMatrix, CurrentColRadius, 64, FColor::Blue, false, -1.f, 1, 5.f);
 			//DrawDebugCircle(GetWorld(), AsteroidMatrix, dist, 64, FColor::Red, false, -1.f, 1, 5.f);
 			
 
@@ -146,6 +146,7 @@ void ATrueGravityManager::Tick(float DeltaTime)
 
 				float TargetToCurrentDistance = 0.f;
 				float TargetToCurrentAcceleration = 0.f;
+				float CurrentToTargetAcceleration = 0.f;
 
 				//Get Target Location, Mass and Radius
 				FVector TargetLocation = Target->GetActorLocation();
@@ -171,25 +172,36 @@ void ATrueGravityManager::Tick(float DeltaTime)
 				FVector ToCurrent = TargetLocation-CurrentLocation;
 				ToCurrent.Normalize();
 
+				FVector ToTargetFrom = CurrentLocation - TargetLocation;
+				ToTargetFrom.Normalize();
 				//VISUALIZE
-				DrawDebugLine(GetWorld(), CurrentLocation, TargetLocation, FColor::Purple, false, -1.f, 10.f);
+				//DrawDebugLine(GetWorld(), CurrentLocation, TargetLocation, FColor::Purple, false, -1.f, 10.f);
 
 				//Calculate Gravity Force from Current To Target
 				TargetToCurrentDistance = (CurrentLocation-TargetLocation).Size();
 				TargetToCurrentAcceleration = (GravitationalConstant * TargetGravRadius * TargetMass) / (TargetToCurrentDistance * TargetToCurrentDistance);
-
+				CurrentToTargetAcceleration = (GravitationalConstant * CurrentGravRadius * CurrentMass) / (TargetToCurrentDistance * TargetToCurrentDistance);
 				//Only Add Force if Not Intersecting
-				if ((CurrentLocation-TargetLocation).Size() > TargetGravRadius + CurrentGravRadius) {
+				if (TargetToCurrentDistance > (TargetColRadius*2)) {
 					CurrentMeshComponent->AddForce(-CurrentVelocity * AsteroidDrag*CurrentAsteroidDrag, NAME_None, true);
-					CurrentMeshComponent->AddForce(ToCurrent * TargetToCurrentAcceleration, NAME_None, true);
+					//TargetMeshComponent->AddForce(-TargetVelocity * AsteroidDrag * TargetAsteroidDrag, NAME_None, true);
+
+					CurrentMeshComponent->AddForce(ToCurrent * TargetToCurrentAcceleration , NAME_None, true);
 					//Why did this suddenly work???
-					
+					//CurrentMeshComponent->AddForce(ToTargetFrom * CurrentToTargetAcceleration*RepelMult, NAME_None, false);
 						//VISUALIZE
-						float MinDist = sqrt((GravitationalConstant * Current->GravityComponent->Radius * Current->GravityComponent->Mass) / MinAccel);
-						//FMatrix AsteroidMatrix = FMatrix(FVector::UpVector, FVector::ForwardVector, FVector::RightVector, CurrentLocation);
-						DrawDebugCircle(GetWorld(), AsteroidMatrix, CurrentGravRadius, 64, FColor::Green, false, -1.f, 1, 5.f);
-						DrawDebugCircle(GetWorld(), AsteroidMatrix, MinDist, 64, FColor::Red, false, -1.f, 1, 5.f);
+					//	float MinDist = sqrt((GravitationalConstant * Current->GravityComponent->Radius * Current->GravityComponent->Mass) / MinAccel);
+					//	FMatrix AsteroidMatrix = FMatrix(FVector::UpVector, FVector::ForwardVector, FVector::RightVector, CurrentLocation);
+					//	DrawDebugCircle(GetWorld(), AsteroidMatrix, CurrentGravRadius, 64, FColor::Green, false, -1.f, 1, 5.f);
+					//	DrawDebugCircle(GetWorld(), AsteroidMatrix, MinDist, 64, FColor::Red, false, -1.f, 1, 5.f);
 				}
+				//else {
+
+				
+					//CurrentMeshComponent->AddForce(-CurrentVelocity * AsteroidDrag * CurrentAsteroidDrag, NAME_None, true);
+					//if(TargetToCurrentDistance<CurrentColRadius*2.f)
+						//CurrentMeshComponent->AddForce(ToTargetFrom * TargetToCurrentAcceleration*(TargetGravRadius+CurrentGravRadius)/TargetToCurrentDistance*RepelMult, NAME_None, true);
+				//}
 
 			}
 

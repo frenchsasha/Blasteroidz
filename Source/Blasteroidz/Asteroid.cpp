@@ -12,11 +12,9 @@ AAsteroid::AAsteroid()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("STATIC MESH"));
-	//Collision = CreateDefaultSubobject<USphereComponent>(TEXT("CUSTOM COLLISION"));
 	GeneralMovementComponent = CreateDefaultSubobject<UGeneralMovementComponent>(TEXT("CUSTOM MOVEMENT"));
 	GravityComponent = CreateDefaultSubobject<UGravityComponent>(TEXT("Gravity Component"));
-	
-	
+
 	StaticMesh->CanEditSimulatePhysics();
 	
 
