@@ -22,11 +22,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		class UGravityComponent* GravityComponent;
-//	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-//		class USpringArmComponent* SpringArm;
-//
-//	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-//		class UCameraComponent* Camera;
+
 //
 protected:
 	// Called when the game starts or when spawned
@@ -50,10 +46,13 @@ public:
 	APlayerController* PlayerController;
 
 	float forwardIn;
+	bool boostIn = false;
+		
 
 private:
 
-	
+	void boostOn();
+	void boostOff();
 	void forward(float value);
 	void rotate(float value);
 

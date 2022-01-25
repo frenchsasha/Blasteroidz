@@ -22,6 +22,8 @@ public:
 
 	void Drag(FVector Velocity, FVector& NewVelocity, float DeltaTime, float PlayerDrag);
 
+	float Boost( float Duration, float DeltaTime);
+
 
 public:
 	UPROPERTY(Category = "Player Movement", BlueprintReadWrite, EditAnywhere)
@@ -29,5 +31,18 @@ public:
 		float PlayerDrag = 0.95f;
 
 	UPROPERTY(Category = "Player Movement", BlueprintReadWrite, EditAnywhere)
-		float PlayerAcceleration = 100.f;
+	    float PlayerAcceleration = 100.f;
+
+	UPROPERTY(Category = "Player Movement", BlueprintReadWrite, EditAnywhere)
+		float BoostDuration = 3.f;
+
+	UPROPERTY(Category = "Player Movement", BlueprintReadWrite, EditAnywhere)
+		float BoostMult = 1.f;
+
+	UPROPERTY(Category = "Player Movement", BlueprintReadWrite, EditAnywhere)
+		UCurveFloat* Accel = nullptr;
+
+private:
+	bool isBoost = false;
+	float timer = 0.f;
 };

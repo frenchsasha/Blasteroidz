@@ -25,7 +25,7 @@ public:
 
 
 	UPROPERTY(Category = "Gravity", BlueprintReadWrite, EditAnywhere)
-		float RepelMult = 10.f;
+		float SlowDist = 320.f;
 
 	UPROPERTY(Category = "Asteroid Movement", BlueprintReadWrite, EditAnywhere)
 		//FROM 0-1
